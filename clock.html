@@ -1,1 +1,1436 @@
-# Futuristic-clock
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Premium futuristic digital clock with an animated purple flame aura."
+    >
+
+    <title>Futuristic Digital Clock</title>
+
+    <style>
+        /* =========================================================
+           1. RESET & DESIGN VARIABLES
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --background: #030207;
+            --background-light: #090611;
+
+            --purple-deep: #3a0b73;
+            --purple: #7c2cff;
+            --violet: #a855f7;
+            --electric: #c084fc;
+            --ice: #e9d5ff;
+
+            --text-main: #ffffff;
+            --text-soft: rgba(255, 255, 255, 0.66);
+
+            --glass: rgba(255, 255, 255, 0.045);
+            --glass-border: rgba(216, 180, 254, 0.18);
+
+            --shadow-purple:
+                rgba(139, 45, 255, 0.35);
+        }
+
+
+        /* =========================================================
+           2. PAGE
+        ========================================================= */
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            color: var(--text-main);
+
+            background:
+                radial-gradient(
+                    ellipse at 50% 45%,
+                    rgba(100, 20, 190, 0.13) 0%,
+                    rgba(40, 10, 80, 0.08) 28%,
+                    transparent 58%
+                ),
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(126, 34, 206, 0.08),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(88, 28, 135, 0.08),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #020104,
+                    #08050d 50%,
+                    #020104
+                );
+        }
+
+
+        /* =========================================================
+           3. AMBIENT BACKGROUND LIGHT
+        ========================================================= */
+
+        .background {
+            position: fixed;
+            inset: 0;
+
+            overflow: hidden;
+            pointer-events: none;
+
+            z-index: 0;
+        }
+
+        .background::before {
+            content: "";
+
+            position: absolute;
+
+            width: 55vw;
+            height: 55vw;
+
+            max-width: 750px;
+            max-height: 750px;
+
+            left: 50%;
+            top: 50%;
+
+            transform: translate(-50%, -50%);
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(122, 40, 255, 0.12),
+                    rgba(80, 20, 150, 0.04) 40%,
+                    transparent 70%
+                );
+
+            filter: blur(35px);
+
+            animation: ambientPulse 7s ease-in-out infinite alternate;
+        }
+
+        @keyframes ambientPulse {
+            from {
+                opacity: 0.55;
+                transform: translate(-50%, -50%) scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.08);
+            }
+        }
+
+
+        /* =========================================================
+           4. PARTICLE FIELD
+        ========================================================= */
+
+        .particles {
+            position: absolute;
+            inset: 0;
+        }
+
+        .particle {
+            position: absolute;
+
+            width: 2px;
+            height: 2px;
+
+            border-radius: 50%;
+
+            background: rgba(192, 132, 252, 0.75);
+
+            box-shadow:
+                0 0 6px rgba(168, 85, 247, 0.8),
+                0 0 14px rgba(124, 44, 255, 0.35);
+
+            opacity: 0;
+
+            animation:
+                particleFloat linear infinite,
+                particleTwinkle ease-in-out infinite alternate;
+        }
+
+        .particle:nth-child(1) {
+            left: 8%;
+            bottom: -20px;
+            animation-duration: 11s, 2.5s;
+        }
+
+        .particle:nth-child(2) {
+            left: 19%;
+            bottom: -30px;
+            animation-duration: 14s, 3s;
+            animation-delay: 1s, 0.5s;
+        }
+
+        .particle:nth-child(3) {
+            left: 31%;
+            bottom: -20px;
+            animation-duration: 12s, 2.8s;
+            animation-delay: 4s, 1s;
+        }
+
+        .particle:nth-child(4) {
+            left: 45%;
+            bottom: -30px;
+            animation-duration: 16s, 3.4s;
+            animation-delay: 2s, 0.3s;
+        }
+
+        .particle:nth-child(5) {
+            left: 61%;
+            bottom: -20px;
+            animation-duration: 13s, 2.4s;
+            animation-delay: 5s, 0.8s;
+        }
+
+        .particle:nth-child(6) {
+            left: 75%;
+            bottom: -30px;
+            animation-duration: 15s, 3.2s;
+            animation-delay: 3s, 0.4s;
+        }
+
+        .particle:nth-child(7) {
+            left: 87%;
+            bottom: -20px;
+            animation-duration: 12s, 2.6s;
+            animation-delay: 6s, 1.2s;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translate3d(0, 0, 0) scale(0.3);
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: translate3d(18px, -50vh, 0) scale(1);
+            }
+
+            80% {
+                opacity: 0.35;
+            }
+
+            100% {
+                transform: translate3d(-22px, -110vh, 0) scale(0.4);
+                opacity: 0;
+            }
+        }
+
+        @keyframes particleTwinkle {
+            from {
+                filter: brightness(0.7);
+            }
+
+            to {
+                filter: brightness(1.5);
+            }
+        }
+
+
+        /* =========================================================
+           5. MAIN CLOCK AREA
+        ========================================================= */
+
+        main {
+            position: relative;
+
+            z-index: 10;
+
+            width: min(94vw, 1000px);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        /* =========================================================
+           6. CLOCK WRAPPER
+        ========================================================= */
+
+        .clock-wrapper {
+            position: relative;
+
+            width: min(900px, 100%);
+
+            isolation: isolate;
+        }
+
+
+        /* =========================================================
+           7. DEEP PURPLE FLAME AURA
+           
+           Several independent layers are combined to make the
+           aura look like cold digital fire instead of a simple glow.
+        ========================================================= */
+
+        .clock-wrapper::before {
+            content: "";
+
+            position: absolute;
+
+            inset: -42px;
+
+            border-radius: 52px;
+
+            background:
+                conic-gradient(
+                    from 0deg,
+                    transparent 0deg,
+                    rgba(76, 20, 145, 0.2) 20deg,
+                    rgba(124, 44, 255, 0.75) 52deg,
+                    rgba(192, 132, 252, 0.9) 78deg,
+                    rgba(91, 33, 182, 0.25) 105deg,
+                    transparent 138deg,
+                    rgba(126, 34, 206, 0.75) 188deg,
+                    rgba(216, 180, 254, 0.75) 230deg,
+                    transparent 270deg,
+                    rgba(124, 44, 255, 0.8) 320deg,
+                    transparent 360deg
+                );
+
+            filter: blur(30px);
+
+            opacity: 0.72;
+
+            z-index: -5;
+
+            animation:
+                auraRotate 14s linear infinite,
+                auraBreath 4s ease-in-out infinite alternate;
+        }
+
+        .clock-wrapper::after {
+            content: "";
+
+            position: absolute;
+
+            inset: -20px;
+
+            border-radius: 42px;
+
+            background:
+                radial-gradient(
+                    ellipse at 15% 50%,
+                    rgba(168, 85, 247, 0.8),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    ellipse at 85% 50%,
+                    rgba(124, 44, 255, 0.75),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    ellipse at 50% 0%,
+                    rgba(216, 180, 254, 0.5),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    ellipse at 50% 100%,
+                    rgba(88, 28, 135, 0.7),
+                    transparent 32%
+                );
+
+            filter: blur(18px);
+
+            opacity: 0.55;
+
+            z-index: -4;
+
+            animation:
+                auraDrift 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes auraRotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes auraBreath {
+            from {
+                opacity: 0.48;
+                transform: scale(0.97);
+            }
+
+            to {
+                opacity: 0.85;
+                transform: scale(1.025);
+            }
+        }
+
+        @keyframes auraDrift {
+            0% {
+                transform: scale(0.97) translateX(-4px);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: scale(1.03) translateX(4px);
+                opacity: 0.72;
+            }
+        }
+
+
+        /* =========================================================
+           8. FLAME TONGUES
+        ========================================================= */
+
+        .flames {
+            position: absolute;
+
+            inset: -35px;
+
+            pointer-events: none;
+
+            z-index: -3;
+
+            overflow: hidden;
+
+            border-radius: 55px;
+
+            filter: blur(1px);
+        }
+
+        .flame {
+            position: absolute;
+
+            width: 120px;
+            height: 190px;
+
+            border-radius:
+                65% 35% 55% 45% /
+                65% 45% 55% 35%;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(233, 213, 255, 0.75),
+                    rgba(192, 132, 252, 0.55) 30%,
+                    rgba(124, 44, 255, 0.4) 65%,
+                    transparent 100%
+                );
+
+            filter: blur(9px);
+
+            opacity: 0.35;
+
+            transform-origin: bottom center;
+
+            mix-blend-mode: screen;
+        }
+
+        .flame:nth-child(1) {
+            left: 3%;
+            bottom: -65px;
+            transform: rotate(-22deg) scale(0.8);
+
+            animation: flameMove1 3.7s ease-in-out infinite alternate;
+        }
+
+        .flame:nth-child(2) {
+            left: 22%;
+            bottom: -85px;
+            transform: rotate(-8deg) scale(0.65);
+
+            animation: flameMove2 4.2s ease-in-out infinite alternate;
+        }
+
+        .flame:nth-child(3) {
+            right: 20%;
+            bottom: -80px;
+            transform: rotate(12deg) scale(0.72);
+
+            animation: flameMove3 3.4s ease-in-out infinite alternate;
+        }
+
+        .flame:nth-child(4) {
+            right: 2%;
+            bottom: -65px;
+            transform: rotate(24deg) scale(0.85);
+
+            animation: flameMove4 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes flameMove1 {
+            from {
+                transform: rotate(-25deg) scale(0.72);
+                opacity: 0.25;
+            }
+
+            to {
+                transform: rotate(-12deg) scale(0.95) translateY(-18px);
+                opacity: 0.52;
+            }
+        }
+
+        @keyframes flameMove2 {
+            from {
+                transform: rotate(-12deg) scale(0.62);
+            }
+
+            to {
+                transform: rotate(5deg) scale(0.9) translateY(-22px);
+            }
+        }
+
+        @keyframes flameMove3 {
+            from {
+                transform: rotate(15deg) scale(0.68);
+            }
+
+            to {
+                transform: rotate(-3deg) scale(0.92) translateY(-20px);
+            }
+        }
+
+        @keyframes flameMove4 {
+            from {
+                transform: rotate(25deg) scale(0.76);
+                opacity: 0.25;
+            }
+
+            to {
+                transform: rotate(11deg) scale(0.98) translateY(-17px);
+                opacity: 0.55;
+            }
+        }
+
+
+        /* =========================================================
+           9. GLASS CLOCK CARD
+        ========================================================= */
+
+        .clock-card {
+            position: relative;
+
+            min-height: 450px;
+
+            padding:
+                clamp(38px, 7vw, 75px)
+                clamp(22px, 6vw, 65px);
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            border-radius: 32px;
+
+            border: 1px solid var(--glass-border);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.075),
+                    rgba(255, 255, 255, 0.025) 45%,
+                    rgba(126, 34, 206, 0.025)
+                );
+
+            backdrop-filter: blur(25px) saturate(125%);
+            -webkit-backdrop-filter: blur(25px) saturate(125%);
+
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.12),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.025),
+                0 30px 100px rgba(0, 0, 0, 0.6),
+                0 0 70px rgba(124, 44, 255, 0.08);
+
+            overflow: hidden;
+
+            animation: cardPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes cardPulse {
+            0%,
+            100% {
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+                    inset 0 -1px 0 rgba(255, 255, 255, 0.025),
+                    0 30px 100px rgba(0, 0, 0, 0.6),
+                    0 0 60px rgba(124, 44, 255, 0.06);
+            }
+
+            50% {
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+                    inset 0 -1px 0 rgba(255, 255, 255, 0.025),
+                    0 30px 100px rgba(0, 0, 0, 0.6),
+                    0 0 85px rgba(124, 44, 255, 0.12);
+            }
+        }
+
+
+        /* =========================================================
+           10. GLASS REFLECTION
+        ========================================================= */
+
+        .clock-card::before {
+            content: "";
+
+            position: absolute;
+
+            width: 75%;
+            height: 180%;
+
+            left: -90%;
+            top: -40%;
+
+            transform: rotate(20deg);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.045),
+                    transparent
+                );
+
+            animation: glassReflection 10s ease-in-out infinite;
+
+            pointer-events: none;
+        }
+
+        @keyframes glassReflection {
+            0%,
+            55% {
+                left: -90%;
+            }
+
+            100% {
+                left: 140%;
+            }
+        }
+
+
+        /* =========================================================
+           11. TOP LABEL
+        ========================================================= */
+
+        .label {
+            margin-bottom: 18px;
+
+            font-size: 0.68rem;
+
+            font-weight: 600;
+
+            letter-spacing: 0.42em;
+
+            text-transform: uppercase;
+
+            color: rgba(233, 213, 255, 0.58);
+
+            text-shadow:
+                0 0 15px rgba(168, 85, 247, 0.35);
+        }
+
+
+        /* =========================================================
+           12. LIVE STATUS
+        ========================================================= */
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            margin-bottom: 20px;
+
+            font-size: 0.68rem;
+
+            letter-spacing: 0.18em;
+
+            text-transform: uppercase;
+
+            color: rgba(255, 255, 255, 0.42);
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    #f3e8ff 0%,
+                    #c084fc 35%,
+                    #7c2cff 70%
+                );
+
+            box-shadow:
+                0 0 8px #c084fc,
+                0 0 20px rgba(124, 44, 255, 0.65);
+
+            animation:
+                statusPulse 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes statusPulse {
+            from {
+                opacity: 0.45;
+                transform: scale(0.75);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1.15);
+            }
+        }
+
+
+        /* =========================================================
+           13. DIGITAL TIME
+        ========================================================= */
+
+        .time {
+            position: relative;
+
+            display: flex;
+
+            align-items: baseline;
+            justify-content: center;
+
+            gap: clamp(3px, 0.8vw, 10px);
+
+            white-space: nowrap;
+
+            font-family:
+                "Courier New",
+                Consolas,
+                monospace;
+
+            font-size:
+                clamp(
+                    3rem,
+                    10vw,
+                    8.6rem
+                );
+
+            font-weight: 700;
+
+            line-height: 0.9;
+
+            letter-spacing: 0.025em;
+
+            color: #ffffff;
+
+            text-shadow:
+                0 0 5px rgba(255, 255, 255, 0.9),
+                0 0 15px rgba(216, 180, 254, 0.65),
+                0 0 35px rgba(168, 85, 247, 0.5),
+                0 0 75px rgba(124, 44, 255, 0.25);
+
+            animation: digitalGlow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes digitalGlow {
+            from {
+                filter: brightness(0.96);
+            }
+
+            to {
+                filter: brightness(1.08);
+            }
+        }
+
+
+        /* =========================================================
+           14. CLOCK COLON
+        ========================================================= */
+
+        .colon {
+            opacity: 1;
+
+            transition:
+                opacity 0.15s ease,
+                text-shadow 0.15s ease;
+        }
+
+        .colon.blink {
+            opacity: 0.22;
+
+            text-shadow:
+                0 0 4px rgba(255, 255, 255, 0.15);
+        }
+
+
+        /* =========================================================
+           15. AM / PM
+        ========================================================= */
+
+        .ampm {
+            margin-left: 7px;
+
+            font-family:
+                "Segoe UI",
+                sans-serif;
+
+            font-size:
+                clamp(
+                    0.75rem,
+                    1.8vw,
+                    1.15rem
+                );
+
+            font-weight: 600;
+
+            letter-spacing: 0.16em;
+
+            color: var(--ice);
+
+            text-shadow:
+                0 0 12px rgba(192, 132, 252, 0.7),
+                0 0 25px rgba(124, 44, 255, 0.35);
+        }
+
+
+        /* =========================================================
+           16. DATE
+        ========================================================= */
+
+        .date {
+            margin-top: 34px;
+
+            font-size:
+                clamp(
+                    0.78rem,
+                    1.8vw,
+                    1.08rem
+                );
+
+            font-weight: 400;
+
+            line-height: 1.6;
+
+            letter-spacing: 0.18em;
+
+            text-transform: uppercase;
+
+            color: rgba(255, 255, 255, 0.58);
+        }
+
+        .date strong {
+            color: rgba(255, 255, 255, 0.9);
+
+            font-weight: 500;
+
+            text-shadow:
+                0 0 14px rgba(192, 132, 252, 0.2);
+        }
+
+
+        /* =========================================================
+           17. DECORATIVE ENERGY LINE
+        ========================================================= */
+
+        .decorative-line {
+            position: relative;
+
+            width: min(340px, 70%);
+
+            height: 1px;
+
+            margin-top: 30px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(192, 132, 252, 0.7),
+                    rgba(233, 213, 255, 0.9),
+                    rgba(192, 132, 252, 0.7),
+                    transparent
+                );
+
+            box-shadow:
+                0 0 10px rgba(168, 85, 247, 0.55),
+                0 0 25px rgba(124, 44, 255, 0.25);
+        }
+
+        .decorative-line::after {
+            content: "";
+
+            position: absolute;
+
+            left: 50%;
+            top: 50%;
+
+            width: 45px;
+            height: 5px;
+
+            transform: translate(-50%, -50%);
+
+            border-radius: 50%;
+
+            background: rgba(233, 213, 255, 0.75);
+
+            filter: blur(5px);
+
+            animation: linePulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes linePulse {
+            from {
+                opacity: 0.3;
+                width: 25px;
+            }
+
+            to {
+                opacity: 0.8;
+                width: 65px;
+            }
+        }
+
+
+        /* =========================================================
+           18. SUBTLE HEAT / DIGITAL DISTORTION
+        ========================================================= */
+
+        .clock-wrapper {
+            animation: distortion 6s ease-in-out infinite;
+        }
+
+        @keyframes distortion {
+            0%,
+            92%,
+            100% {
+                filter: none;
+            }
+
+            94% {
+                filter:
+                    contrast(1.02)
+                    brightness(1.01);
+            }
+
+            96% {
+                filter:
+                    contrast(1.04)
+                    brightness(1.02);
+            }
+        }
+
+
+        /* =========================================================
+           19. RESPONSIVE DESIGN — TABLETS
+        ========================================================= */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 18px;
+            }
+
+            main {
+                width: 100%;
+            }
+
+            .clock-wrapper {
+                width: 100%;
+            }
+
+            .clock-card {
+                min-height: 370px;
+
+                padding:
+                    42px 18px;
+
+                border-radius: 26px;
+            }
+
+            .clock-wrapper::before {
+                inset: -25px;
+
+                filter: blur(25px);
+            }
+
+            .clock-wrapper::after {
+                inset: -12px;
+
+                filter: blur(15px);
+            }
+
+            .flames {
+                inset: -22px;
+            }
+
+            .time {
+                gap: 3px;
+
+                letter-spacing: 0.005em;
+            }
+
+            .ampm {
+                margin-left: 3px;
+            }
+
+            .date {
+                margin-top: 27px;
+
+                letter-spacing: 0.1em;
+            }
+
+            .decorative-line {
+                margin-top: 25px;
+            }
+        }
+
+
+        /* =========================================================
+           20. RESPONSIVE DESIGN — SMALL PHONES
+        ========================================================= */
+
+        @media (max-width: 420px) {
+
+            body {
+                padding: 12px;
+            }
+
+            .clock-card {
+                min-height: 330px;
+
+                padding:
+                    34px 10px;
+
+                border-radius: 22px;
+            }
+
+            .label {
+                margin-bottom: 14px;
+
+                font-size: 0.55rem;
+
+                letter-spacing: 0.28em;
+            }
+
+            .status {
+                margin-bottom: 17px;
+
+                font-size: 0.58rem;
+            }
+
+            .time {
+                font-size: 2.5rem;
+            }
+
+            .ampm {
+                font-size: 0.62rem;
+                letter-spacing: 0.1em;
+            }
+
+            .date {
+                margin-top: 23px;
+
+                font-size: 0.66rem;
+
+                letter-spacing: 0.065em;
+            }
+
+            .decorative-line {
+                width: 65%;
+
+                margin-top: 22px;
+            }
+
+            .clock-wrapper::before {
+                inset: -15px;
+
+                filter: blur(18px);
+            }
+
+            .clock-wrapper::after {
+                inset: -8px;
+
+                filter: blur(12px);
+            }
+        }
+
+
+        /* =========================================================
+           21. ACCESSIBILITY — REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================================================
+         BACKGROUND
+    ========================================================== -->
+
+    <div class="background" aria-hidden="true">
+
+        <div class="particles">
+
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         MAIN CLOCK
+    ========================================================== -->
+
+    <main>
+
+        <section
+            class="clock-wrapper"
+            aria-label="Futuristic digital clock"
+        >
+
+            <!-- Additional flame layers -->
+            <div class="flames" aria-hidden="true">
+
+                <span class="flame"></span>
+                <span class="flame"></span>
+                <span class="flame"></span>
+                <span class="flame"></span>
+
+            </div>
+
+
+            <!-- =================================================
+                 GLASS CLOCK CARD
+            ================================================== -->
+
+            <div class="clock-card">
+
+                <!-- Interface label -->
+                <div class="label">
+                    Temporal Interface
+                </div>
+
+
+                <!-- Live indicator -->
+                <div class="status">
+
+                    <span
+                        class="status-dot"
+                        aria-hidden="true"
+                    ></span>
+
+                    Live Local Time
+
+                </div>
+
+
+                <!-- =================================================
+                     DIGITAL CLOCK
+                ================================================== -->
+
+                <div
+                    class="time"
+                    id="clock"
+                    aria-live="polite"
+                    aria-label="Current time"
+                >
+
+                    <span id="hours">00</span>
+
+                    <span
+                        class="colon"
+                        id="colon"
+                        aria-hidden="true"
+                    >:</span>
+
+                    <span id="minutes">00</span>
+
+                    <span
+                        class="colon"
+                        aria-hidden="true"
+                    >:</span>
+
+                    <span id="seconds">00</span>
+
+                    <span
+                        class="ampm"
+                        id="ampm"
+                    >AM</span>
+
+                </div>
+
+
+                <!-- =================================================
+                     DATE
+                ================================================== -->
+
+                <div
+                    class="date"
+                    id="date"
+                    aria-label="Current date"
+                >
+                    Loading date...
+                </div>
+
+
+                <!-- Decorative energy line -->
+                <div
+                    class="decorative-line"
+                    aria-hidden="true"
+                ></div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         Live clock functionality
+    ========================================================== -->
+
+    <script>
+
+        /*
+         * Get references to the clock elements.
+         */
+
+        const hoursElement =
+            document.getElementById("hours");
+
+        const minutesElement =
+            document.getElementById("minutes");
+
+        const secondsElement =
+            document.getElementById("seconds");
+
+        const ampmElement =
+            document.getElementById("ampm");
+
+        const dateElement =
+            document.getElementById("date");
+
+        const colonElement =
+            document.getElementById("colon");
+
+
+        /*
+         * Add a leading zero.
+         *
+         * 7  -> 07
+         * 12 -> 12
+         */
+
+        function addZero(number) {
+
+            return number
+                .toString()
+                .padStart(2, "0");
+
+        }
+
+
+        /*
+         * Update the clock.
+         */
+
+        function updateClock() {
+
+            /*
+             * JavaScript Date object gets the user's
+             * current local date and time.
+             */
+
+            const now = new Date();
+
+
+            /*
+             * Get current hour.
+             */
+
+            let hours = now.getHours();
+
+
+            /*
+             * Get minutes and seconds.
+             */
+
+            const minutes = now.getMinutes();
+
+            const seconds = now.getSeconds();
+
+
+            /*
+             * Determine AM or PM.
+             */
+
+            const period =
+                hours >= 12
+                    ? "PM"
+                    : "AM";
+
+
+            /*
+             * Convert 24-hour time into 12-hour time.
+             */
+
+            hours = hours % 12;
+
+
+            if (hours === 0) {
+
+                hours = 12;
+
+            }
+
+
+            /*
+             * Update the displayed time.
+             */
+
+            hoursElement.textContent =
+                addZero(hours);
+
+            minutesElement.textContent =
+                addZero(minutes);
+
+            secondsElement.textContent =
+                addZero(seconds);
+
+            ampmElement.textContent =
+                period;
+
+
+            /*
+             * Blink the clock colon every second.
+             */
+
+            colonElement.classList.toggle(
+                "blink",
+                seconds % 2 === 1
+            );
+
+
+            /*
+             * Format the current date according
+             * to the user's local browser settings.
+             */
+
+            const formattedDate =
+                new Intl.DateTimeFormat(
+                    undefined,
+                    {
+                        weekday: "long",
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                ).format(now);
+
+
+            /*
+             * Display the date.
+             */
+
+            dateElement.innerHTML =
+                `<strong>${formattedDate}</strong>`;
+
+
+            /*
+             * Update accessibility information.
+             */
+
+            document
+                .getElementById("clock")
+                .setAttribute(
+                    "aria-label",
+                    `Current time is ${addZero(hours)}:${addZero(minutes)}:${addZero(seconds)} ${period}`
+                );
+
+        }
+
+
+        /*
+         * Run immediately when the page loads.
+         */
+
+        updateClock();
+
+
+        /*
+         * Keep the clock synchronized by updating
+         * once every second.
+         */
+
+        setInterval(
+            updateClock,
+            1000
+        );
+
+    </script>
+
+</body>
+</html>
+```
+
